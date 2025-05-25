@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZC的个人博客 - Bento Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 157, 195, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(221, 190, 169, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            color: #374151;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }.container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 24px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #8b9dc3;
+            margin-bottom: 16px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #8b9dc3, #ddbea9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 12px;
+            grid-auto-rows: minmax(300px, auto);
+            align-items: start;
+            padding: 8px;
+        }.bento-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 
+                0 8px 32px rgba(139, 157, 195, 0.08),
+                0 2px 8px rgba(139, 157, 195, 0.04);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+        }        .bento-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 48px rgba(139, 157, 195, 0.15),
+                0 8px 16px rgba(139, 157, 195, 0.08);
+            border-color: rgba(139, 157, 195, 0.2);
+        }        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(
+                90deg, 
+                #ddbea9 0%, 
+                #cb997e 25%, 
+                #a5a58d 50%, 
+                #b7b7a4 75%, 
+                #8b9dc3 100%
+            );
+            opacity: 0.8;
+        }        .card-large {
+            grid-column: span 2;
+            grid-row: span 2;
+            min-height: 620px;
+            padding: 40px;
+        }
+
+        .card-wide {
+            grid-column: span 2;
+            min-height: 360px;
+            padding: 36px;
+        }
+
+        .card-tall {
+            grid-row: span 2;
+            min-height: 620px;
+            padding: 36px;
+        }        .card-title {
+            font-size: 1.5rem;
+            color: #8b9dc3;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }        .card-content {
+            color: #6b7280;
+            font-size: 1rem;
+            line-height: 1.7;
+            flex-grow: 1;
+            margin-bottom: 8px;
+        }
+
+        .profile-card {
+            text-align: center;
+            background: linear-gradient(135deg, #ddbea9 0%, #cb997e 100%);
+            color: white;
+        }        .profile-card::before {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.4) 100%
+            );
+        }        .project-card::before {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.4) 100%
+            );
+        }
+
+        .profile-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #a5a58d, #b7b7a4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.12),
+                0 4px 8px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-avatar-svg {
+            width: 100%;
+            height: 100%;
+        }        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .skill-item {
+            background: rgba(139, 157, 195, 0.08);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(139, 157, 195, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }        .skill-item:hover {
+            background: rgba(139, 157, 195, 0.15);
+            transform: translateY(-2px);
+            border-color: rgba(139, 157, 195, 0.25);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }        .blog-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .blog-post {
+            background: rgba(221, 190, 169, 0.08);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #ddbea9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(221, 190, 169, 0.1), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .blog-post:hover {
+            background: rgba(221, 190, 169, 0.15);
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(221, 190, 169, 0.2);
+        }
+
+        .blog-post:hover::before {
+            width: 100%;
+        }        .blog-date {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .blog-title {
+            color: #8b9dc3;
+            font-size: 1.125rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }        .contact-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .contact-link {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(139, 157, 195, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #8b9dc3;
+            font-size: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(139, 157, 195, 0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        .contact-link:hover {
+            background: #8b9dc3;
+            color: white;
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 157, 195, 0.3);
+        }        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #8b9dc3;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #a5a58d 0%, #b7b7a4 100%);
+            color: white;
+        }
+
+        .project-card::before {
+            background: rgba(255, 255, 255, 0.3);
+        }        .project-tech {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .tech-tag:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }        .timeline {
+            position: relative;
+            padding-left: 36px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(
+                to bottom, 
+                #ddbea9 0%, 
+                #cb997e 30%, 
+                #a5a58d 70%, 
+                #8b9dc3 100%
+            );
+            border-radius: 1.5px;
+        }        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+            padding: 4px 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -42px;
+            top: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #8b9dc3;
+            border: 4px solid white;
+            box-shadow: 
+                0 0 0 3px rgba(139, 157, 195, 0.2),
+                0 4px 8px rgba(139, 157, 195, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            background: #ddbea9;
+            transform: scale(1.2);
+            box-shadow: 
+                0 0 0 4px rgba(221, 190, 169, 0.3),
+                0 6px 12px rgba(139, 157, 195, 0.2);
+        }        .timeline-date {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-title {
+            color: #8b9dc3;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+        }@media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: minmax(250px, auto);
+            }
+            
+            .card-large,
+            .card-wide,
+            .card-tall {
+                grid-column: span 1;
+                grid-row: span 1;
+                min-height: 250px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-links {
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>ZC的个人博客</h1>
+            <p>用心记录生活，用代码创造价值</p>
+        </header>
+
+        <div class="bento-grid">            <!-- 个人简介卡片 -->
+            <div class="bento-card profile-card card-large">
+                <div class="profile-avatar">
+                    <svg class="profile-avatar-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 背景圆形 -->
+                        <defs>
+                            <linearGradient id="avatarBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ddbea9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#cb997e;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="faceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f4e4d6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#e8d5c4;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- 背景 -->
+                        <circle cx="60" cy="60" r="60" fill="url(#avatarBg)"/>
+                        
+                        <!-- 脸部 -->
+                        <circle cx="60" cy="50" r="25" fill="url(#faceGradient)"/>
+                        
+                        <!-- 眼睛 -->
+                        <circle cx="52" cy="45" r="2" fill="#8b9dc3"/>
+                        <circle cx="68" cy="45" r="2" fill="#8b9dc3"/>
+                        
+                        <!-- 眼睛高光 -->
+                        <circle cx="53" cy="44" r="0.8" fill="white"/>
+                        <circle cx="69" cy="44" r="0.8" fill="white"/>
+                        
+                        <!-- 鼻子 -->
+                        <ellipse cx="60" cy="52" rx="1" ry="1.5" fill="#d4b5a0"/>
+                        
+                        <!-- 嘴巴 -->
+                        <path d="M 56 58 Q 60 62 64 58" stroke="#cb997e" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- 头发 -->
+                        <path d="M 35 50 Q 40 25 60 30 Q 80 25 85 50 Q 82 35 75 32 Q 60 28 45 32 Q 38 35 35 50" fill="#8b9dc3"/>
+                        
+                        <!-- 身体/衣服 -->
+                        <ellipse cx="60" cy="95" rx="30" ry="25" fill="#a5a58d"/>
+                        
+                        <!-- 衣领 -->
+                        <path d="M 45 80 Q 60 75 75 80 Q 70 85 60 82 Q 50 85 45 80" fill="#b7b7a4"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">关于我</h2>
+                <div class="card-content">
+                    <p>热爱技术的全栈开发者，专注于创建优雅而实用的数字体验。在前端开发、后端架构和用户体验设计方面有着丰富的经验。</p>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">项目经验</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">年工作经验</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">120+</div>
+                            <div class="stat-label">博客文章</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-links">
+                    <a href="#" class="contact-link">📧</a>
+                    <a href="#" class="contact-link">💻</a>
+                    <a href="#" class="contact-link">📱</a>
+                    <a href="#" class="contact-link">🐦</a>
+                </div>
+            </div>
+
+            <!-- 技能卡片 -->
+            <div class="bento-card">
+                <h3 class="card-title">技能专长</h3>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <span class="skill-icon">🎨</span>
+                        <div>UI/UX</div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-icon">⚛️</span>
+                        <div>React</div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-icon">🟢</span>
+                        <div>Node.js</div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-icon">🐍</span>
+                        <div>Python</div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-icon">💾</span>
+                        <div>数据库</div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-icon">☁️</span>
+                        <div>云服务</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最新博客文章 -->
+            <div class="bento-card card-wide">
+                <h3 class="card-title">最新文章</h3>
+                <div class="blog-posts">
+                    <article class="blog-post">
+                        <div class="blog-date">2025年5月20日</div>
+                        <div class="blog-title">探索现代Web开发的最佳实践</div>
+                        <div class="card-content">深入了解现代前端框架、性能优化和用户体验设计的最新趋势...</div>
+                    </article>
+                    <article class="blog-post">
+                        <div class="blog-date">2025年5月15日</div>
+                        <div class="blog-title">从零开始构建可扩展的后端架构</div>
+                        <div class="card-content">分享在微服务架构、数据库设计和API开发方面的实践经验...</div>
+                    </article>
+                    <article class="blog-post">
+                        <div class="blog-date">2025年5月10日</div>
+                        <div class="blog-title">设计系统与组件库的构建心得</div>
+                        <div class="card-content">如何创建一致、可维护且可扩展的设计系统，提升团队效率...</div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- 项目展示 -->
+            <div class="bento-card project-card">
+                <h3 class="card-title">精选项目</h3>
+                <div class="card-content">
+                    <h4>电商平台管理系统</h4>
+                    <p>基于React和Node.js构建的全栈电商解决方案，支持多租户架构和实时数据分析。</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工作经历 -->
+            <div class="bento-card card-tall">
+                <h3 class="card-title">工作经历</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023 - 至今</div>
+                        <div class="timeline-title">高级前端工程师</div>
+                        <div class="card-content">负责大型Web应用的架构设计与开发，团队技术决策与代码审查。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022 - 2023</div>
+                        <div class="timeline-title">全栈开发工程师</div>
+                        <div class="card-content">参与多个项目的前后端开发，专注于用户体验优化和性能提升。</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021 - 2022</div>
+                        <div class="timeline-title">前端开发实习生</div>
+                        <div class="card-content">学习现代前端技术栈，参与企业级应用的开发与维护。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 个人理念 -->
+            <div class="bento-card">
+                <h3 class="card-title">设计理念</h3>
+                <div class="card-content">
+                    <p>我相信优秀的产品源于对细节的执着追求。每一行代码、每一个像素都应该为用户创造价值。</p>
+                    <p style="margin-top: 15px; font-style: italic; color: #8b9dc3;">
+                        "简约不是减少，而是去除无关紧要的东西，让重要的更加突出。"
+                    </p>
+                </div>
+            </div>
+
+            <!-- 联系方式 -->
+            <div class="bento-card">
+                <h3 class="card-title">联系我</h3>
+                <div class="card-content">
+                    <p>📧 to_win_the_world@outlook.com</p>
+                    <p style="margin-top: 10px;">🌐 www.zc-blog.com</p>
+                    <p style="margin-top: 10px;">📱 +86 19710630043</p>
+                    <p style="margin-top: 15px; color: #8b9dc3;">
+                        欢迎交流技术话题，分享创意想法，或者讨论合作机会。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
